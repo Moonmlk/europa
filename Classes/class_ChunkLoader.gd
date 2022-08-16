@@ -61,18 +61,20 @@ func get_surrounding_chunks() -> Array:
 	var end = Vector2(clamp(current_chunk.x+RENDER_DISTANCE, current_chunk.x+RENDER_DISTANCE, CHUNK_LIMIT), 
 					clamp(current_chunk.y+RENDER_DISTANCE, current_chunk.y+RENDER_DISTANCE, CHUNK_LIMIT))
 	
+	#delete out of bounds chunks
 	var neighbor_chunks = []
 	for yy in range(start.y, end.y+1):
 		for xx in range(start.x, end.x+1):
 			if(!is_out_of_bounds(Vector2(xx,yy))):
 				neighbor_chunks.push_back(Vector2(xx,yy))
 	
+	#Add chunks that do not exist to chunk map 
 	for x in neighbor_chunks:
 		if(!chunks.has(x)):
 			create_new_chunk(x)
 	return neighbor_chunks
 
-
+#DEPERCATED/ NOT IN USE
 #Return the chunk the player is currently in
 func get_chunk_origin(coords: Vector2) -> Vector2:
 	var chunk_origin = coords

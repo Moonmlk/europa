@@ -16,35 +16,24 @@ func _init(origin: Vector2):
 	chunk_origin = origin
 	generate_map()
 	
-	
+	#Add the tilemap positions of the chunk
 	for yy in range(WorldVariables.g_chunk_size):
 		for xx in range(WorldVariables.g_chunk_size):
 			positions.push_back(Vector2(chunk_origin.x*(WorldVariables.g_tile_size*WorldVariables.g_chunk_size) + xx*WorldVariables.g_tile_size, 
 										chunk_origin.y*(WorldVariables.g_tile_size*WorldVariables.g_chunk_size) + yy*WorldVariables.g_tile_size))
 	
-	#if(!positions.empty() && chunk_origin.y != 0):
-#		var directions = [1,-1]
-#		var xory = [0,1]
-#		var pos = positions
-#		var dir = 1
-#
-#		if(randf() < .4):
-#			pos.shuffle()
-#			pos = pos[0]
-#			positions.erase(pos)
-#
-#			for step in range(0, randi() % 200 + 25):
-#				xory.shuffle() 
-#				directions.shuffle()
-#				dir = directions[0]
-#
-#				var next_pos = pos
-#				next_pos[xory[0]] += dir*WorldVariables.g_tile_size
-#				if(positions.has(next_pos)):
-#					positions.erase(pos)
-#					pos = next_pos
+
+#Populate given 2D array with given value
+func populate_array(map, val):
+	for i in range(WorldVariables.g_chunk_size):
+		map.append([])
+		for j in range(WorldVariables.g_chunk_size):
+			map[i].append(val)
+	return map
 
 
+#Cellular automata cave generator adapted from link below
+#https://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664
 func generate_map() -> void:
 	if(randf() < chance_cave && chunk_origin.y != 0):
 		init_Map()
@@ -52,14 +41,6 @@ func generate_map() -> void:
 			cell_map = do_simulation_step(cell_map)
 	else:
 		populate_array(cell_map, true)
-
-
-func populate_array(map, val):
-	for i in range(WorldVariables.g_chunk_size):
-		map.append([])
-		for j in range(WorldVariables.g_chunk_size):
-			map[i].append(val)
-	return map
 
 
 func init_Map() -> void:
